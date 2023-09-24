@@ -1,6 +1,5 @@
 package com.kontvip.myapplication.data.cache.model.meal
 
-import androidx.room.Entity
 
 data class CacheMealList(private val id: String) {
 

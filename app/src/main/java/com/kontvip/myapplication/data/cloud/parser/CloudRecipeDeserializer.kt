@@ -8,6 +8,12 @@ import com.kontvip.myapplication.data.cloud.model.recipe.CloudRecipe
 import java.lang.reflect.Type
 
 class CloudRecipeDeserializer : JsonDeserializer<CloudRecipe> {
+
+    companion object {
+        private const val INGREDIENT_KEY = "strIngredient"
+        private const val MEASURE_KEY = "strMeasure"
+    }
+
     override fun deserialize(
         json: JsonElement?,
         typeOfT: Type?,
@@ -20,8 +26,8 @@ class CloudRecipeDeserializer : JsonDeserializer<CloudRecipe> {
 
         var index = 1
         while (true) {
-            val ingredientKey = "strIngredient$index"
-            val measureKey = "strMeasure$index"
+            val ingredientKey = "$INGREDIENT_KEY$index"
+            val measureKey = "$MEASURE_KEY$index"
 
             val hasIngredient = jsonObject.has(ingredientKey)
             val hasMeasure = jsonObject.has(ingredientKey)
