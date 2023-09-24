@@ -1,7 +1,7 @@
 package com.kontvip.myapplication.data.cache
 
-import com.kontvip.myapplication.data.cache.model.CacheMealList
-import com.kontvip.myapplication.data.cache.model.CacheRecipeList
+import com.kontvip.myapplication.data.cache.model.meal.CacheMealList
+import com.kontvip.myapplication.data.cache.model.recipe.CacheRecipeList
 
 interface CacheSource {
     suspend fun mealsByName(name: String): CacheMealList
@@ -41,8 +41,7 @@ interface CacheSource {
         }
 
         override suspend fun saveMealsByIngredient(
-            ingredient: String,
-            cacheMealList: CacheMealList
+            ingredient: String, cacheMealList: CacheMealList
         ) {
             TODO("Not yet implemented")
         }

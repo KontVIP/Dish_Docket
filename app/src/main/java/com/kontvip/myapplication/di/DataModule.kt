@@ -3,9 +3,13 @@ package com.kontvip.myapplication.di
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kontvip.myapplication.core.AppDispatchers
+import com.kontvip.myapplication.data.DataToDomainFacade
 import com.kontvip.myapplication.data.DefaultRepository
+import com.kontvip.myapplication.data.cache.CacheSource
 import com.kontvip.myapplication.data.cloud.CloudSource
 import com.kontvip.myapplication.data.cloud.api.FoodRecipeApi
+import com.kontvip.myapplication.data.cloud.model.recipe.CloudRecipe
+import com.kontvip.myapplication.data.cloud.parser.CloudRecipeDeserializer
 import com.kontvip.myapplication.domain.Repository
 import dagger.Module
 import dagger.Provides
@@ -24,6 +28,7 @@ class DataModule {
     @Singleton
     fun provideGson(): Gson = GsonBuilder()
         .setLenient()
+        .registerTypeAdapter(CloudRecipe::class.java, CloudRecipeDeserializer())
         .create()
 
     @Provides
@@ -59,6 +64,17 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideRepository(cloudSource: CloudSource): Repository =
-        DefaultRepository(cloudSource = cloudSource)
+    fun provideRepository(
+        cloudSource: CloudSource,
+        cacheSource: CacheSource,
+        dataToDomainFacade: DataToDomainFacade
+    ): Repository = DefaultRepository(
+        cloudSource = cloudSource,
+        cacheSource = cacheSource,
+        dataToDomainFacade = dataToDomainFacade
+    )
+
+    @Provides
+    @Singleton
+    fun provideCacheSource(): CacheSource = CacheSource.Default()
 }

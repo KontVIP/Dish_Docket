@@ -1,7 +1,10 @@
 package com.kontvip.myapplication.data.cloud.model.meal
 
+import com.google.gson.annotations.SerializedName
+
 data class CloudMealList(
-    private val cloudMeals: List<CloudMeal>?
+    @SerializedName("meals")
+    val cloudMeals: List<CloudMeal>?
 ) {
 
     interface Mapper<T> {

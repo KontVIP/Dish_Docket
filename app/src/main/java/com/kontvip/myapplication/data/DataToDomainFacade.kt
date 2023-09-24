@@ -1,13 +1,13 @@
 package com.kontvip.myapplication.data
 
-import com.kontvip.myapplication.data.cache.model.CacheMealList
-import com.kontvip.myapplication.data.cache.model.CacheRecipeList
+import com.kontvip.myapplication.data.cache.model.meal.CacheMealList
+import com.kontvip.myapplication.data.cache.model.recipe.CacheRecipeList
 import com.kontvip.myapplication.data.cloud.model.meal.CloudMealList
 import com.kontvip.myapplication.data.cloud.model.recipe.CloudRecipeList
 import com.kontvip.myapplication.domain.model.DomainMealList
 import com.kontvip.myapplication.domain.model.DomainRecipeList
 
-interface DataToDomainProcess {
+interface DataToDomainFacade {
 
     suspend fun processDataToDomainMealList(fetchMealList: FetchData.MealList): DomainMealList
     suspend fun processDataToDomainRecipeList(fetchRecipeList: FetchData.RecipeList): DomainRecipeList
@@ -17,7 +17,7 @@ interface DataToDomainProcess {
         private val cacheMealListToDomainMapper: CacheMealList.Mapper<DomainMealList>,
         private val cloudRecipeListToCacheMapper: CloudRecipeList.Mapper<CacheRecipeList>,
         private val cacheRecipeListToDomainMapper: CacheRecipeList.Mapper<DomainRecipeList>,
-    ) : DataToDomainProcess {
+    ) : DataToDomainFacade {
 
         override suspend fun processDataToDomainMealList(fetchMealList: FetchData.MealList): DomainMealList {
             val cacheRecipeList = fetchMealList.fetchCache()
