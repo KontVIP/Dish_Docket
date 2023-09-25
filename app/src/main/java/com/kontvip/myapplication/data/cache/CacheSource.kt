@@ -1,63 +1,46 @@
 package com.kontvip.myapplication.data.cache
 
-import com.kontvip.myapplication.data.cache.model.meal.CacheMealList
-import com.kontvip.myapplication.data.cache.model.recipe.CacheRecipeList
+import com.kontvip.myapplication.data.cache.database.DishDocketDao
+import com.kontvip.myapplication.data.cache.model.meal.CacheMeal
+import com.kontvip.myapplication.data.cache.model.recipe.CacheRecipe
 
 interface CacheSource {
-    suspend fun mealsByName(name: String): CacheMealList
-    suspend fun saveMealsByName(name: String, cacheMealList: CacheMealList)
+    suspend fun mealsByName(name: String): List<CacheMeal>
+    suspend fun mealsByCountry(country: String): List<CacheMeal>
+    suspend fun mealsByIngredient(ingredient: String): List<CacheMeal>
+    suspend fun saveMealList(cacheMealList: List<CacheMeal>)
 
-    suspend fun mealsByCountry(country: String): CacheMealList
-    suspend fun saveMealsByCountry(country: String, cacheMealList: CacheMealList)
+    suspend fun recipeById(id: String): CacheRecipe
+    suspend fun saveRecipeList(cacheRecipeList: List<CacheRecipe>)
 
-    suspend fun mealsByIngredient(ingredient: String): CacheMealList
-    suspend fun saveMealsByIngredient(ingredient: String, cacheMealList: CacheMealList)
-
-    suspend fun recipeById(id: Int): CacheRecipeList
-    suspend fun saveRecipeById(id: Int, cacheRecipeList: CacheRecipeList)
-
-    suspend fun randomRecipe(): CacheRecipeList
-
-
-    class Default : CacheSource {
-        override suspend fun mealsByName(name: String): CacheMealList {
-            TODO("Not yet implemented")
+    class Default(private val dao: DishDocketDao) : CacheSource {
+        override suspend fun mealsByName(name: String): List<CacheMeal> {
+            return dao.cacheMealsByName(name)
         }
 
-        override suspend fun saveMealsByName(name: String, cacheMealList: CacheMealList) {
-            TODO("Not yet implemented")
+        override suspend fun mealsByCountry(country: String): List<CacheMeal> {
+            return dao.cacheMealsByCountry(area = country)
         }
 
-        override suspend fun mealsByCountry(country: String): CacheMealList {
-            TODO("Not yet implemented")
+        override suspend fun mealsByIngredient(ingredient: String): List<CacheMeal> {
+            return dao.cacheMealsByIngredient(ingredient)
         }
 
-        override suspend fun saveMealsByCountry(country: String, cacheMealList: CacheMealList) {
-            TODO("Not yet implemented")
+        override suspend fun saveMealList(cacheMealList: List<CacheMeal>) {
+            cacheMealList.forEach {
+                dao.insertCacheMeal(it)
+            }
         }
 
-        override suspend fun mealsByIngredient(ingredient: String): CacheMealList {
-            TODO("Not yet implemented")
+        override suspend fun recipeById(id: String): CacheRecipe {
+            return dao.cacheRecipeById(id)
         }
 
-        override suspend fun saveMealsByIngredient(
-            ingredient: String, cacheMealList: CacheMealList
-        ) {
-            TODO("Not yet implemented")
+        override suspend fun saveRecipeList(cacheRecipeList: List<CacheRecipe>) {
+           cacheRecipeList.forEach {
+               dao.insertCacheRecipe(it)
+           }
         }
-
-        override suspend fun recipeById(id: Int): CacheRecipeList {
-            TODO("Not yet implemented")
-        }
-
-        override suspend fun saveRecipeById(id: Int, cacheRecipeList: CacheRecipeList) {
-            TODO("Not yet implemented")
-        }
-
-        override suspend fun randomRecipe(): CacheRecipeList {
-            TODO("Not yet implemented")
-        }
-
     }
 
 }

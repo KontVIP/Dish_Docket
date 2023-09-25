@@ -1,45 +1,45 @@
 package com.kontvip.myapplication.data
 
-import com.kontvip.myapplication.data.cache.model.meal.CacheMealList
-import com.kontvip.myapplication.data.cache.model.recipe.CacheRecipeList
+import com.kontvip.myapplication.data.cache.model.meal.CacheMeal
+import com.kontvip.myapplication.data.cache.model.recipe.CacheRecipe
 import com.kontvip.myapplication.data.cloud.model.meal.CloudMealList
 import com.kontvip.myapplication.data.cloud.model.recipe.CloudRecipeList
-import com.kontvip.myapplication.domain.model.DomainMealList
-import com.kontvip.myapplication.domain.model.DomainRecipeList
+import com.kontvip.myapplication.domain.model.DomainMeal
+import com.kontvip.myapplication.domain.model.DomainRecipe
 
 interface DataToDomainFacade {
 
-    suspend fun processDataToDomainMealList(fetchMealList: FetchData.MealList): DomainMealList
-    suspend fun processDataToDomainRecipeList(fetchRecipeList: FetchData.RecipeList): DomainRecipeList
+    suspend fun processDataToDomainMealList(fetchMealList: FetchData.MealList): List<DomainMeal>
+    suspend fun processDataToDomainRecipeList(fetchRecipeList: FetchData.RecipeList): List<DomainRecipe>
 
     class Default(
-        private val cloudMealListToCacheMapper: CloudMealList.Mapper<CacheMealList>,
-        private val cacheMealListToDomainMapper: CacheMealList.Mapper<DomainMealList>,
-        private val cloudRecipeListToCacheMapper: CloudRecipeList.Mapper<CacheRecipeList>,
-        private val cacheRecipeListToDomainMapper: CacheRecipeList.Mapper<DomainRecipeList>,
+        private val cloudMealListToCacheMapper: CloudMealList.Mapper<List<CacheMeal>>,
+        private val cloudRecipeListToCacheMapper: CloudRecipeList.Mapper<List<CacheRecipe>>,
+        private val cacheMealToDomainMapper: CacheMeal.Mapper<DomainMeal>,
+        private val cacheRecipeToDomainMapper: CacheRecipe.Mapper<DomainRecipe>,
     ) : DataToDomainFacade {
 
-        override suspend fun processDataToDomainMealList(fetchMealList: FetchData.MealList): DomainMealList {
+        override suspend fun processDataToDomainMealList(fetchMealList: FetchData.MealList): List<DomainMeal> {
             val cacheRecipeList = fetchMealList.fetchCache()
             return if (cacheRecipeList.isEmpty()) {
                 val cloudRecipeList = fetchMealList.fetchCloud()
                 val cloudRecipeListAsCache = cloudRecipeList.map(cloudMealListToCacheMapper)
                 fetchMealList.saveCache(cloudRecipeListAsCache)
-                cloudRecipeListAsCache.map(cacheMealListToDomainMapper)
+                cloudRecipeListAsCache.map { it.map(cacheMealToDomainMapper) }
             } else {
-                cacheRecipeList.map(cacheMealListToDomainMapper)
+                cacheRecipeList.map { it.map(cacheMealToDomainMapper) }
             }
         }
 
-        override suspend fun processDataToDomainRecipeList(fetchRecipeList: FetchData.RecipeList): DomainRecipeList {
+        override suspend fun processDataToDomainRecipeList(fetchRecipeList: FetchData.RecipeList): List<DomainRecipe> {
             val cacheRecipeList = fetchRecipeList.fetchCache()
             return if (cacheRecipeList.isEmpty()) {
                 val cloudRecipeList = fetchRecipeList.fetchCloud()
                 val cloudRecipeListAsCache = cloudRecipeList.map(cloudRecipeListToCacheMapper)
                 fetchRecipeList.saveCache(cloudRecipeListAsCache)
-                cloudRecipeListAsCache.map(cacheRecipeListToDomainMapper)
+                cloudRecipeListAsCache.map { it.map(cacheRecipeToDomainMapper) }
             } else {
-                cacheRecipeList.map(cacheRecipeListToDomainMapper)
+                cacheRecipeList.map { it.map(cacheRecipeToDomainMapper) }
             }
         }
 

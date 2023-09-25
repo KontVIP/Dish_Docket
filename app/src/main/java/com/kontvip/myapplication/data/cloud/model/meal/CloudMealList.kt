@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class CloudMealList(
     @SerializedName("meals")
-    val cloudMeals: List<CloudMeal>?
+    private val cloudMeals: List<CloudMeal>?
 ) {
 
     interface Mapper<T> {

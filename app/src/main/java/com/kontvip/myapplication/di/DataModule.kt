@@ -1,19 +1,37 @@
 package com.kontvip.myapplication.di
 
+import android.content.Context
+import androidx.room.Room
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kontvip.myapplication.core.AppDispatchers
 import com.kontvip.myapplication.data.DataToDomainFacade
 import com.kontvip.myapplication.data.DefaultRepository
 import com.kontvip.myapplication.data.cache.CacheSource
+import com.kontvip.myapplication.data.cache.database.DishDocketDao
+import com.kontvip.myapplication.data.cache.database.DishDocketDatabase
+import com.kontvip.myapplication.data.cache.model.meal.CacheMeal
+import com.kontvip.myapplication.data.cache.model.recipe.CacheRecipe
 import com.kontvip.myapplication.data.cloud.CloudSource
 import com.kontvip.myapplication.data.cloud.api.FoodRecipeApi
+import com.kontvip.myapplication.data.cloud.model.meal.CloudMealList
 import com.kontvip.myapplication.data.cloud.model.recipe.CloudRecipe
+import com.kontvip.myapplication.data.cloud.model.recipe.CloudRecipeList
 import com.kontvip.myapplication.data.cloud.parser.CloudRecipeDeserializer
+import com.kontvip.myapplication.data.cache.mapper.CacheMealToDomainMapper
+import com.kontvip.myapplication.data.cache.mapper.CacheRecipeToDomainMapper
+import com.kontvip.myapplication.data.cloud.mapper.CloudMealListToCacheMapper
+import com.kontvip.myapplication.data.cloud.mapper.CloudMealToCacheMapper
+import com.kontvip.myapplication.data.cloud.mapper.CloudRecipeListToCacheMapper
+import com.kontvip.myapplication.data.cloud.mapper.CloudRecipeToCacheMapper
+import com.kontvip.myapplication.data.cloud.model.meal.CloudMeal
 import com.kontvip.myapplication.domain.Repository
+import com.kontvip.myapplication.domain.model.DomainMeal
+import com.kontvip.myapplication.domain.model.DomainRecipe
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -76,5 +94,62 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideCacheSource(): CacheSource = CacheSource.Default()
+    fun provideCacheSource(dao: DishDocketDao): CacheSource = CacheSource.Default(dao = dao)
+
+    @Provides
+    @Singleton
+    fun provideDishDocketDao(@ApplicationContext context: Context): DishDocketDao =
+        Room.databaseBuilder(context, DishDocketDatabase::class.java, "dish_docket_database")
+            .fallbackToDestructiveMigration()
+            .build().dishDocketDao()
+
+    @Provides
+    @Singleton
+    fun provideDataToDomainFacade(
+        cloudMealListToCacheMapper: CloudMealList.Mapper<List<CacheMeal>>,
+        cloudRecipeListToCacheMapper: CloudRecipeList.Mapper<List<CacheRecipe>>,
+        cacheMealToDomainMapper: CacheMeal.Mapper<DomainMeal>,
+        cacheRecipeToDomainMapper: CacheRecipe.Mapper<DomainRecipe>,
+    ): DataToDomainFacade = DataToDomainFacade.Default(
+        cloudMealListToCacheMapper = cloudMealListToCacheMapper,
+        cloudRecipeListToCacheMapper = cloudRecipeListToCacheMapper,
+        cacheMealToDomainMapper = cacheMealToDomainMapper,
+        cacheRecipeToDomainMapper = cacheRecipeToDomainMapper
+    )
+
+    @Provides
+    @Singleton
+    fun provideCacheRecipeToDomainMapper(): CacheRecipe.Mapper<DomainRecipe> =
+        CacheRecipeToDomainMapper()
+
+    @Provides
+    @Singleton
+    fun provideCacheMealToDomainMapper(): CacheMeal.Mapper<DomainMeal> =
+        CacheMealToDomainMapper()
+
+    @Provides
+    @Singleton
+    fun provideCloudRecipeToCacheMapper(): CloudRecipe.Mapper<CacheRecipe> =
+        CloudRecipeToCacheMapper()
+
+    @Provides
+    @Singleton
+    fun provideCloudMealListToCacheMapper(
+        cloudMealToCacheMapper: CloudMeal.Mapper<CacheMeal>
+    ): CloudMealList.Mapper<List<CacheMeal>> = CloudMealListToCacheMapper(
+        cloudMealToCacheMapper = cloudMealToCacheMapper
+    )
+
+    @Provides
+    @Singleton
+    fun provideCloudMealToCacheMapper(): CloudMeal.Mapper<CacheMeal> =
+        CloudMealToCacheMapper()
+
+    @Provides
+    @Singleton
+    fun provideCloudRecipeListToCacheMapper(
+        cloudRecipeToCacheMapper: CloudRecipe.Mapper<CacheRecipe>
+    ): CloudRecipeList.Mapper<List<CacheRecipe>> = CloudRecipeListToCacheMapper(
+        cloudRecipeToCacheMapper = cloudRecipeToCacheMapper
+    )
 }
