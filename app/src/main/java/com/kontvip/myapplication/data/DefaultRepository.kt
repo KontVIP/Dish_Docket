@@ -17,7 +17,7 @@ class DefaultRepository(
 ) : Repository {
 
     override suspend fun mealsByName(name: String): List<DomainMeal> {
-        val fetchMealList = object : FetchData.MealList(cacheSource) {
+        val fetchMealList = object : HandleData.MealList(cacheSource) {
             override suspend fun fetchCache(): List<CacheMeal> = cacheSource.mealsByName(name)
             override suspend fun fetchCloud(): CloudMealList = cloudSource.mealsByName(name)
         }
@@ -25,7 +25,7 @@ class DefaultRepository(
     }
 
     override suspend fun mealsByCountry(country: String): List<DomainMeal> {
-        val fetchMealList = object : FetchData.MealList(cacheSource) {
+        val fetchMealList = object : HandleData.MealList(cacheSource) {
             override suspend fun fetchCache(): List<CacheMeal> = cacheSource.mealsByCountry(country)
             override suspend fun fetchCloud(): CloudMealList = cloudSource.mealsByCountry(country)
         }
@@ -33,7 +33,7 @@ class DefaultRepository(
     }
 
     override suspend fun mealsByIngredient(ingredient: String): List<DomainMeal> {
-        val fetchMealList = object : FetchData.MealList(cacheSource) {
+        val fetchMealList = object : HandleData.MealList(cacheSource) {
             override suspend fun fetchCache(): List<CacheMeal> = cacheSource.mealsByIngredient(ingredient)
             override suspend fun fetchCloud(): CloudMealList = cloudSource.mealsByIngredient(ingredient)
         }
@@ -41,7 +41,7 @@ class DefaultRepository(
     }
 
     override suspend fun recipeById(id: String): List<DomainRecipe> {
-        val fetchRecipeList = object : FetchData.RecipeList(cacheSource) {
+        val fetchRecipeList = object : HandleData.RecipeList(cacheSource) {
             override suspend fun fetchCache(): List<CacheRecipe> = listOf(cacheSource.recipeById(id))
             override suspend fun fetchCloud(): CloudRecipeList = cloudSource.recipeById(id)
         }
@@ -49,7 +49,7 @@ class DefaultRepository(
     }
 
     override suspend fun randomRecipe(): List<DomainRecipe> {
-        val fetchRecipeList = object : FetchData.RecipeList(cacheSource) {
+        val fetchRecipeList = object : HandleData.RecipeList(cacheSource) {
             override suspend fun fetchCache(): List<CacheRecipe> = emptyList()
             override suspend fun fetchCloud(): CloudRecipeList = cloudSource.randomRecipe()
         }

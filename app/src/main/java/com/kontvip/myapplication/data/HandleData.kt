@@ -7,20 +7,20 @@ import com.kontvip.myapplication.data.cloud.model.meal.CloudMealList
 import com.kontvip.myapplication.data.cloud.model.recipe.CloudRecipeList
 
 
-interface FetchData<T, D> {
+interface HandleData<T, D> {
     suspend fun fetchCache(): T
     suspend fun fetchCloud(): D
     suspend fun saveCache(c: T)
 
     abstract class MealList(
         private val cacheSource: CacheSource
-    ) : FetchData<List<CacheMeal>, CloudMealList> {
+    ) : HandleData<List<CacheMeal>, CloudMealList> {
         override suspend fun saveCache(c: List<CacheMeal>): Unit = cacheSource.saveMealList(c)
     }
 
     abstract class RecipeList(
         private val cacheSource: CacheSource
-    ) : FetchData<List<CacheRecipe>, CloudRecipeList> {
+    ) : HandleData<List<CacheRecipe>, CloudRecipeList> {
         override suspend fun saveCache(c: List<CacheRecipe>): Unit = cacheSource.saveRecipeList(c)
     }
 }

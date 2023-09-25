@@ -9,8 +9,8 @@ import com.kontvip.myapplication.domain.model.DomainRecipe
 
 interface DataToDomainFacade {
 
-    suspend fun processDataToDomainMealList(fetchMealList: FetchData.MealList): List<DomainMeal>
-    suspend fun processDataToDomainRecipeList(fetchRecipeList: FetchData.RecipeList): List<DomainRecipe>
+    suspend fun processDataToDomainMealList(fetchMealList: HandleData.MealList): List<DomainMeal>
+    suspend fun processDataToDomainRecipeList(fetchRecipeList: HandleData.RecipeList): List<DomainRecipe>
 
     class Default(
         private val cloudMealListToCacheMapper: CloudMealList.Mapper<List<CacheMeal>>,
@@ -19,7 +19,7 @@ interface DataToDomainFacade {
         private val cacheRecipeToDomainMapper: CacheRecipe.Mapper<DomainRecipe>,
     ) : DataToDomainFacade {
 
-        override suspend fun processDataToDomainMealList(fetchMealList: FetchData.MealList): List<DomainMeal> {
+        override suspend fun processDataToDomainMealList(fetchMealList: HandleData.MealList): List<DomainMeal> {
             val cacheRecipeList = fetchMealList.fetchCache()
             return if (cacheRecipeList.isEmpty()) {
                 val cloudRecipeList = fetchMealList.fetchCloud()
@@ -31,7 +31,7 @@ interface DataToDomainFacade {
             }
         }
 
-        override suspend fun processDataToDomainRecipeList(fetchRecipeList: FetchData.RecipeList): List<DomainRecipe> {
+        override suspend fun processDataToDomainRecipeList(fetchRecipeList: HandleData.RecipeList): List<DomainRecipe> {
             val cacheRecipeList = fetchRecipeList.fetchCache()
             return if (cacheRecipeList.isEmpty()) {
                 val cloudRecipeList = fetchRecipeList.fetchCloud()
