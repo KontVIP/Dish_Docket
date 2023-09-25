@@ -15,14 +15,11 @@ class CloudRecipeDeserializer : JsonDeserializer<CloudRecipe> {
     }
 
     override fun deserialize(
-        json: JsonElement?,
-        typeOfT: Type?,
-        context: JsonDeserializationContext?
+        json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?
     ): CloudRecipe {
         val jsonObject = json?.asJsonObject ?: JsonObject()
 
-        val ingredients = mutableListOf<String>()
-        val measures = mutableListOf<String>()
+        val ingredientsAndMeasures = mutableMapOf<String, String>()
 
         var index = 1
         while (true) {
@@ -35,16 +32,11 @@ class CloudRecipeDeserializer : JsonDeserializer<CloudRecipe> {
             if (!hasIngredient && !hasMeasure) {
                 break
             }
-            if (hasIngredient) {
+            if (hasIngredient && hasMeasure) {
                 val ingredientValue = jsonObject.getStringSafely(ingredientKey)
-                if (ingredientValue.isNotEmpty()) {
-                    ingredients.add(ingredientValue)
-                }
-            }
-            if (hasMeasure) {
                 val measureValue = jsonObject.getStringSafely(measureKey)
-                if (measureValue.isNotEmpty()) {
-                    measures.add(measureValue)
+                if (ingredientValue.isNotEmpty() && measureValue.isNotEmpty()) {
+                    ingredientsAndMeasures[ingredientValue] = measureValue
                 }
             }
             index++
@@ -64,8 +56,7 @@ class CloudRecipeDeserializer : JsonDeserializer<CloudRecipe> {
             jsonObject.getStringSafely("strSource"),
             jsonObject.getStringSafely("strTags"),
             jsonObject.getStringSafely("strYoutube"),
-            ingredients,
-            measures
+            ingredientsAndMeasures
         )
     }
 

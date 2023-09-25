@@ -14,7 +14,7 @@ interface DishDocketDao {
     fun cacheMealsByName(name: String): List<CacheMeal>
 
     @Query(
-        "SELECT DISTINCT meal_table.idMeal " +
+        "SELECT DISTINCT meal_table.* " +
                 "FROM meal_table INNER JOIN recipe_table " +
                 "ON meal_table.idMeal = recipe_table.idMeal " +
                 "WHERE recipe_table.strArea = :area"
@@ -26,7 +26,9 @@ interface DishDocketDao {
                 "FROM meal_table " +
                 "INNER JOIN recipe_table " +
                 "ON meal_table.idMeal = recipe_table.idMeal " +
-                "WHERE :ingredient IN (SELECT ingredients FROM recipe_table)"
+                "WHERE meal_table.idMeal IN " +
+                "(SELECT recipe_table.idMeal FROM recipe_table " +
+                "WHERE ingredientsAndMeasures LIKE '%' || :ingredient || '%')"
     )
     fun cacheMealsByIngredient(ingredient: String): List<CacheMeal>
 
@@ -34,7 +36,7 @@ interface DishDocketDao {
     fun insertCacheMeal(cacheMeal: CacheMeal)
 
     @Query("SELECT * FROM recipe_table WHERE idMeal = :id")
-    fun cacheRecipeByName(id: String): CacheRecipe
+    fun cacheRecipeById(id: String): CacheRecipe
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCacheRecipe(cacheRecipe: CacheRecipe)

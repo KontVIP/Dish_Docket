@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName
 
 data class CloudRecipeList(
     @SerializedName("meals")
-    val cloudRecipe: List<CloudRecipe>
+    private val cloudRecipes: List<CloudRecipe>
 ) {
 
     interface Mapper<T> {
-        fun map(): T
+        fun map(cloudRecipes: List<CloudRecipe>): T
     }
 
-    fun<T> map(mapper: Mapper<T>) = mapper.map()
+    fun<T> map(mapper: Mapper<T>) = mapper.map(cloudRecipes)
 
 }

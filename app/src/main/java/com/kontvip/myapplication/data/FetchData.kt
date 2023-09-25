@@ -1,7 +1,8 @@
 package com.kontvip.myapplication.data
 
-import com.kontvip.myapplication.data.cache.model.meal.CacheMealList
-import com.kontvip.myapplication.data.cache.model.recipe.CacheRecipeList
+import com.kontvip.myapplication.data.cache.CacheSource
+import com.kontvip.myapplication.data.cache.model.meal.CacheMeal
+import com.kontvip.myapplication.data.cache.model.recipe.CacheRecipe
 import com.kontvip.myapplication.data.cloud.model.meal.CloudMealList
 import com.kontvip.myapplication.data.cloud.model.recipe.CloudRecipeList
 
@@ -11,7 +12,16 @@ interface FetchData<T, D> {
     suspend fun fetchCloud(): D
     suspend fun saveCache(c: T)
 
-    interface MealList : FetchData<CacheMealList, CloudMealList>
-    interface RecipeList : FetchData<CacheRecipeList, CloudRecipeList>
+    abstract class MealList(
+        private val cacheSource: CacheSource
+    ) : FetchData<List<CacheMeal>, CloudMealList> {
+        override suspend fun saveCache(c: List<CacheMeal>): Unit = cacheSource.saveMealList(c)
+    }
+
+    abstract class RecipeList(
+        private val cacheSource: CacheSource
+    ) : FetchData<List<CacheRecipe>, CloudRecipeList> {
+        override suspend fun saveCache(c: List<CacheRecipe>): Unit = cacheSource.saveRecipeList(c)
+    }
 }
 

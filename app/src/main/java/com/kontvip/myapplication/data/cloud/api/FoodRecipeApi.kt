@@ -22,7 +22,7 @@ interface FoodRecipeApi {
 
     @Headers("Content-Type: application/json")
     @GET("lookup.php")
-    suspend fun recipeById(@Query("i") id: Int): CloudRecipeList
+    suspend fun recipeById(@Query("i") id: String): CloudRecipeList
 
     @Headers("Content-Type: application/json")
     @GET("random.php")

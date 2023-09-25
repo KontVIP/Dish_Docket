@@ -11,7 +11,7 @@ interface CloudSource {
     suspend fun mealsByName(name: String): CloudMealList
     suspend fun mealsByCountry(country: String): CloudMealList
     suspend fun mealsByIngredient(ingredient: String): CloudMealList
-    suspend fun recipeById(id: Int): CloudRecipeList
+    suspend fun recipeById(id: String): CloudRecipeList
     suspend fun randomRecipe(): CloudRecipeList
 
     class Default(
@@ -28,7 +28,7 @@ interface CloudSource {
         override suspend fun mealsByIngredient(ingredient: String): CloudMealList =
             withContext(appDispatchers.io()) { api.mealsByIngredient(ingredient) }
 
-        override suspend fun recipeById(id: Int): CloudRecipeList =
+        override suspend fun recipeById(id: String): CloudRecipeList =
             withContext(appDispatchers.io()) { api.recipeById(id) }
 
         override suspend fun randomRecipe(): CloudRecipeList =
