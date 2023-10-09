@@ -1,12 +1,18 @@
 package com.kontvip.myapplication.presentation.model
 
-import com.kontvip.myapplication.domain.model.DishDocketResult
+import com.kontvip.myapplication.domain.model.DishDocketState
 
-class RecipeDishDocketResult() : DishDocketResult() {
+class RecipeDishDocketUiState() : DishDocketState {
 }
 
-class MealDishDocketResult() : DishDocketResult() {
+class MealDishDocketUiState() : DishDocketState {
 }
 
-class ErrorDishDocketResult() : DishDocketResult() {
+class NoInternetUiState() : DishDocketState {
+}
+
+class NoPermissionsUiState() : DishDocketState {
+}
+
+class ServiceUnavailableUiState() : DishDocketState {
 }

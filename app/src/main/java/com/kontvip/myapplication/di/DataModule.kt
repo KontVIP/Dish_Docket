@@ -25,7 +25,7 @@ import com.kontvip.myapplication.data.cloud.mapper.CloudMealToCacheMapper
 import com.kontvip.myapplication.data.cloud.mapper.CloudRecipeListToCacheMapper
 import com.kontvip.myapplication.data.cloud.mapper.CloudRecipeToCacheMapper
 import com.kontvip.myapplication.data.cloud.model.meal.CloudMeal
-import com.kontvip.myapplication.domain.Repository
+import com.kontvip.myapplication.domain.core.Repository
 import com.kontvip.myapplication.domain.model.DomainMeal
 import com.kontvip.myapplication.domain.model.DomainRecipe
 import dagger.Module

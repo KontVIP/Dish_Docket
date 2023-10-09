@@ -6,7 +6,7 @@ import com.kontvip.myapplication.data.cache.model.recipe.CacheRecipe
 import com.kontvip.myapplication.data.cloud.CloudSource
 import com.kontvip.myapplication.data.cloud.model.meal.CloudMealList
 import com.kontvip.myapplication.data.cloud.model.recipe.CloudRecipeList
-import com.kontvip.myapplication.domain.Repository
+import com.kontvip.myapplication.domain.core.Repository
 import com.kontvip.myapplication.domain.model.DomainMealList
 import com.kontvip.myapplication.domain.model.DomainRecipeList
 

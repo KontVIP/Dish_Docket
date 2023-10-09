@@ -1,4 +1,4 @@
-package com.kontvip.myapplication.domain
+package com.kontvip.myapplication.domain.core
 
 import com.kontvip.myapplication.domain.model.DomainMealList
 import com.kontvip.myapplication.domain.model.DomainRecipeList
