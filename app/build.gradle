@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace 'com.kontvip.myapplication'
+    namespace 'com.kontvip.dishdocket'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.kontvip.myapplication"
+        applicationId "com.kontvip.dishdocket"
         minSdk 24
         targetSdk 33
         versionCode 1
