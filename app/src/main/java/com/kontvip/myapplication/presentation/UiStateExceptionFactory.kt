@@ -1,6 +1,6 @@
 package com.kontvip.myapplication.presentation
 
-import com.kontvip.myapplication.domain.mapper.StateExceptionFactory
+import com.kontvip.myapplication.domain.core.StateExceptionFactory
 import com.kontvip.myapplication.domain.model.DishDocketState
 import com.kontvip.myapplication.presentation.model.NoInternetUiState
 import com.kontvip.myapplication.presentation.model.NoPermissionsUiState

@@ -1,4 +1,4 @@
-package com.kontvip.myapplication.domain.mapper
+package com.kontvip.myapplication.domain.core
 
 import com.kontvip.myapplication.domain.model.DishDocketState
 

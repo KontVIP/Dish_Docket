@@ -1,6 +1,6 @@
 package com.kontvip.myapplication.domain
 
-import com.kontvip.myapplication.domain.mapper.StateExceptionFactory
+import com.kontvip.myapplication.domain.core.StateExceptionFactory
 import com.kontvip.myapplication.domain.model.DishDocketState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
